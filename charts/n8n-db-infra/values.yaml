@@ -1,0 +1,8 @@
+persistence:
+  enabled: true
+  size: 1Gi
+  name: n8n-db-pv
+  storageClass: n8n-db-local-path-retain
+
+app:
+  name: n8n-db

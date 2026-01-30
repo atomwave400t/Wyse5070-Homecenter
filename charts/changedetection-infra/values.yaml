@@ -1,0 +1,8 @@
+persistence:
+  enabled: true
+  size: 1Gi
+  name: chd-pv
+  storageClass: chd-local-path-retain
+
+app:
+  name: changedetection

@@ -1,0 +1,8 @@
+persistence:
+  enabled: true
+  size: 1Gi
+  name: radarr-pv
+  storageClass: radarr-local-path-retain
+
+app:
+  name: radarr

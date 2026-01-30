@@ -1,0 +1,85 @@
+# Default values for jellyfin.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/
+image:
+  jellyfin:
+    repository: "ghcr.io/jellyfin/jellyfin"
+    # This sets the pull policy for images.
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "latest"
+
+  jackett:
+    repository: "lscr.io/linuxserver/jackett"
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "latest"
+
+  sonarr:
+    repository: "lscr.io/linuxserver/sonarr"
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "latest"
+
+  radarr:
+    repository: "lscr.io/linuxserver/radarr"
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "latest"
+
+
+# This is for setting up a service more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/
+service:
+  # This sets the ports more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#field-spec-ports
+  jellyfin:
+    port: 8096
+    udpPort: 7359
+    url: "http://jellyfin-test.krz.home"
+
+  jackett:
+    port: 9117
+    name: "jackett"
+    hostname: "jackett-test.krz.home"
+
+  sonarr:
+    port: 8989
+    name: "sonarr"
+    hostname: "sonarr-test.krz.home"
+
+  radarr:
+    port: 7878
+    name: "radarr"
+    hostname: "radarr-test.krz.home"
+
+  type: ClusterIP
+
+# This block is for setting up the ingress for more information can be found here: https://kubernetes.io/docs/concepts/services-networking/ingress/
+ingress:
+  enabled: true
+  host: "jellyfin-test.krz.home"
+  className: nginx
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    nginx.ingress.kubernetes.io/use-forwarded-headers: "true"
+
+envVars:
+  common:
+    TZ: "Europe/Warsaw"
+
+volumes:
+  jellyfin:
+    mountPath: 
+      config: /config
+      cache: /cache
+      media: /media
+  jackett:
+    mountPath:
+      config: /config
+  sonarr:
+    mountPath:
+      config: /config
+  radarr:
+    mountPath: 
+      config: /config

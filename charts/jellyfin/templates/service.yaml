@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "jellyfin.fullname" . }}
+  labels:
+    app: {{ include "jellyfin.name" . }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - name: http
+      port: {{ .Values.service.jellyfin.port }}
+      targetPort: http
+      protocol: TCP
+    - name: udp-port
+      port: {{ .Values.service.jellyfin.udpPort }}
+      targetPort:  {{ .Values.service.jellyfin.udpPort }}
+      protocol: UDP
+    - name: {{ .Values.service.jackett.name }}
+      port: {{ .Values.service.jackett.port }}
+      targetPort: {{ .Values.service.jackett.name }}
+#      targetPort: http
+      protocol: TCP
+    - name: {{ .Values.service.sonarr.name }}
+      port: {{ .Values.service.sonarr.port }}
+      targetPort: {{ .Values.service.sonarr.name }}
+      protocol: TCP
+    - name: {{ .Values.service.radarr.name }}
+      port: {{ .Values.service.radarr.port }}
+      targetPort: {{ .Values.service.radarr.name }}
+      protocol: TCP
+  selector:
+    app: {{ include "jellyfin.name" . }}

@@ -1,0 +1,59 @@
+# Default values for owncloud.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/
+image:
+  owncloud:
+    repository: "owncloud/server"
+    # This sets the pull policy for images.
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "latest"
+  mariadb:
+    repository: "mariadb"
+    # This sets the pull policy for images.
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "lts"
+
+
+# This is for setting up a service more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/
+service:
+  owncloud:  # This sets the ports more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#field-spec-ports
+    port: 8080
+  mariadb:
+    name: "mariadb"
+  redis:
+    name: "redis" 
+
+# This block is for setting up the ingress for more information can be found here: https://kubernetes.io/docs/concepts/services-networking/ingress/
+ingress:
+  enabled: true
+  host: "owncloud-test.krz.home"
+  className: nginx
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    nginx.ingress.kubernetes.io/use-forwarded-headers: "true"
+
+envVars:
+  owncloud:
+    OWNCLOUD_DOMAIN: localhost:8080
+    OWNCLOUD_TRUSTED_DOMAINS: krz.home 
+    OWNCLOUD_DB_TYPE: mysql
+    OWNCLOUD_DB_HOST: localhost
+    OWNCLOUD_DB_UTF8MB4: true
+    OWNCLOUD_REDIS_HOST: localhost
+    OWNCLOUD_REDIS_ENABLED: true
+    HTTP_PORT: 8080
+  mariadb:
+    MYSQL_DATABASE: owncloud
+    MARIADB_AUTO_UPGRADE: 1
+
+volumes:
+  owncloud:
+    mountPath: /config
+  mariadb:
+    mountPath: /var/lib/mysql
+  redis:
+    mountPath: /data

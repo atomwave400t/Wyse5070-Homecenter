@@ -1,0 +1,8 @@
+persistence:
+  enabled: true
+  size: 1Gi
+  name: jackett-pv
+  storageClass: jackett-local-path-retain
+
+app:
+  name: jackett

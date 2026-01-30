@@ -1,0 +1,49 @@
+replicaCount: 1
+
+image:
+  main:
+    repository: ghcr.io/dgtlmoon/changedetection.io
+    tag: "latest"
+    pullPolicy: IfNotPresent
+
+  sidecar:
+    repository: dgtlmoon/sockpuppetbrowser
+    tag: "latest"
+    pullPolicy: IfNotPresent
+
+sidecar:
+  enabled: true
+  port: 3000
+
+ingress:
+  enabled: true
+  host: "changedetection-test.krz.home"
+  className: nginx
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+
+httpRoute:
+  enabled: false
+
+autoscaling:
+  enabled: false
+
+service:
+  port: 5000
+
+envVars:
+  changedetection:
+    PLAYWRIGHT_DRIVER_URL: "ws://localhost:3000/?stealth=1&--disable-web-security=true"
+    TZ: "Europe/Warsaw"
+  browserless:
+    SCREEN_WIDTH: "1920"
+    SCREEN_HEIGHT: "1024"
+    SCREEN_DEPTH: "24"
+
+persistence:
+  enabled: true
+  size: 1Gi
+  storageClass: chd-local-path-retain
+
+volumes:
+  mountPath: /datastore

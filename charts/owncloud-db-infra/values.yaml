@@ -1,0 +1,8 @@
+persistence:
+  enabled: true
+  size: 1Gi
+  name: owncloud-db-pv
+  storageClass: owncloud-db-local-path-retain
+
+app:
+  name: owncloud-db

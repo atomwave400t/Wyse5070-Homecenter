@@ -1,0 +1,55 @@
+# Default values for n8n.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/
+image:
+  repository: "docker.n8n.io/n8nio/n8n"
+  # This sets the pull policy for images.
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "latest"
+
+sidecar:
+  repository: "postgres"
+  pullPolicy: IfNotPresent
+  tag: "16"
+
+# This is for setting up a service more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/
+service:
+  # This sets the ports more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#field-spec-ports
+  port: 5678
+
+# This block is for setting up the ingress for more information can be found here: https://kubernetes.io/docs/concepts/services-networking/ingress/
+ingress:
+  enabled: true
+  host: "n8n-test.krz.home"
+  className: nginx
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    nginx.ingress.kubernetes.io/use-forwarded-headers: "true"
+
+envVars:
+  n8n:
+    TZ: "Europe/Warsaw"
+    GENERIC_TIMEZONE: "Europe/Warsaw"
+    N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS: "true"
+    N8N_RUNNERS_ENABLED: "true"
+    DB_TYPE: postgresdb
+    DB_POSTGRESDB_HOST: localhost
+    DB_POSTGRESDB_PORT: 5432
+    DB_POSTGRESDB_DATABASE: n8n
+    N8N_SECURE_COOKIE: false
+
+volumes:
+  n8n:
+    mountPath: /home/node/.n8n
+  postgres:
+    mountPath:
+      dbData: /var/lib/postgresql/data
+      dbInitScript: /docker-entrypoint-initdb.d
+
+secrets:
+  postgres:
+    name: n8n-credentials
+  

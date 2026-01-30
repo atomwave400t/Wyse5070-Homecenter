@@ -1,0 +1,8 @@
+persistence:
+  enabled: true
+  size: 1Gi
+  name: jellyfin-config-pv
+  storageClass: jellyfin-config-local-path-retain
+
+app:
+  name: jellyfin-config

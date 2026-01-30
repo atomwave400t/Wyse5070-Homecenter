@@ -1,0 +1,8 @@
+persistence:
+  enabled: true
+  size: 1Gi
+  name: owncloud-pv
+  storageClass: owncloud-local-path-retain
+
+app:
+  name: owncloud

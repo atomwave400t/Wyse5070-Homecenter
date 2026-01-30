@@ -1,0 +1,107 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "jellyfin.fullname" . }}
+  labels:
+    {{- include "jellyfin.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ include "jellyfin.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "jellyfin.name" . }}
+    spec:
+      volumes:
+        - name: {{ include "jellyfin.name" . }}-config-data
+          persistentVolumeClaim:
+            claimName: {{ include "jellyfin.name" . }}-config-pvc
+            readOnly: false
+        - name: {{ include "jellyfin.name" . }}-cache-data
+          persistentVolumeClaim:
+            claimName: {{ include "jellyfin.name" . }}-cache-pvc
+            readOnly: false
+        - name: {{ include "jellyfin.name" . }}-media-data
+          persistentVolumeClaim:
+            claimName: {{ include "jellyfin.name" . }}-media-pvc
+            readOnly: false
+        - name: {{ .Values.service.jackett.name }}-data
+          persistentVolumeClaim:
+            claimName: {{ .Values.service.jackett.name }}-pvc
+            readOnly: false
+        - name: {{ .Values.service.sonarr.name }}-data
+          persistentVolumeClaim:
+            claimName: {{ .Values.service.sonarr.name }}-pvc
+            readOnly: false
+        - name: {{ .Values.service.radarr.name }}-data
+          persistentVolumeClaim:
+            claimName: {{ .Values.service.radarr.name }}-pvc
+            readOnly: false
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.jellyfin.repository }}:{{ .Values.image.jellyfin.tag }}"
+          imagePullPolicy: {{ .Values.image.jellyfin.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.jellyfin.port }}
+            - name: udp-port
+              containerPort: {{ .Values.service.jellyfin.udpPort }}
+              protocol: UDP
+          volumeMounts:
+            - name: {{ include "jellyfin.name" . }}-config-data
+              mountPath: {{ .Values.volumes.jellyfin.mountPath.config }}
+            - name: {{ include "jellyfin.name" . }}-cache-data
+              mountPath: {{ .Values.volumes.jellyfin.mountPath.cache }}
+            - name: {{ include "jellyfin.name" . }}-media-data
+              mountPath: {{ .Values.volumes.jellyfin.mountPath.media }}
+          env:
+            - name: JELLYFIN_PublishedServerUrl
+              value: {{ .Values.ingress.host }}
+            - name: TZ
+              value: {{ .Values.envVars.common.TZ }}
+
+        - name: {{ .Values.service.jackett.name }}
+          image: "{{ .Values.image.jackett.repository }}:{{ .Values.image.jackett.tag }}"
+          imagePullPolicy: {{ .Values.image.jackett.pullPolicy }}
+          ports:
+            - name: {{ .Values.service.jackett.name }}
+              containerPort: {{ .Values.service.jackett.port }}
+          volumeMounts:
+            - name: {{ .Values.service.jackett.name }}-data
+              mountPath: {{ .Values.volumes.jackett.mountPath.config }}
+          env:
+            - name: TZ
+              value: {{ .Values.envVars.common.TZ }}
+
+        - name: {{ .Values.service.sonarr.name }}
+          image: "{{ .Values.image.sonarr.repository }}:{{ .Values.image.sonarr.tag }}"
+          imagePullPolicy: {{ .Values.image.sonarr.pullPolicy }}
+          ports:
+            - name: {{ .Values.service.sonarr.name }}
+              containerPort: {{ .Values.service.sonarr.port }}
+          volumeMounts:
+            - name: {{ .Values.service.sonarr.name }}-data
+              mountPath: {{ .Values.volumes.sonarr.mountPath.config }}
+            - name: {{ include "jellyfin.name" . }}-media-data
+              #Sonarr needs to download files to the same directory the jellyfin uses to expose them
+              mountPath: {{ .Values.volumes.jellyfin.mountPath.media }}
+          env:
+            - name: TZ
+              value: {{ .Values.envVars.common.TZ }}
+
+        - name: {{ .Values.service.radarr.name }}
+          image: "{{ .Values.image.radarr.repository }}:{{ .Values.image.radarr.tag }}"
+          imagePullPolicy: {{ .Values.image.radarr.pullPolicy }}
+          ports:
+            - name: {{ .Values.service.radarr.name }}
+              containerPort: {{ .Values.service.radarr.port }}
+          volumeMounts:
+            - name: {{ .Values.service.radarr.name }}-data
+              mountPath: {{ .Values.volumes.radarr.mountPath.config }} 
+            - name: {{ include "jellyfin.name" . }}-media-data
+              #Radarr needs to download files to the same directory the jellyfin uses to expose them
+              mountPath: {{ .Values.volumes.jellyfin.mountPath.media }}
+          env:
+            - name: TZ
+              value: {{ .Values.envVars.common.TZ }}

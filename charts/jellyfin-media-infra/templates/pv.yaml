@@ -1,0 +1,13 @@
+# templates/pv.yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ .Values.persistence.name }}-data
+spec:
+  storageClassName: {{ .Values.persistence.storageClass }}
+  capacity:
+    storage: {{ .Values.persistence.size }}
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: /opt/{{ .Values.app.name }}-data

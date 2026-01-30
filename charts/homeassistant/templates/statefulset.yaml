@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "homeassistant.fullname" . }}
+  labels:
+    {{- include "homeassistant.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ include "homeassistant.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "homeassistant.name" . }}
+    spec:
+      volumes:
+        - name: {{ include "homeassistant.name" . }}-data
+          persistentVolumeClaim:
+            claimName: {{ include "homeassistant.name" . }}-pvc
+            readOnly: false
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+          volumeMounts:
+            - name: {{ include "homeassistant.name" . }}-data
+              mountPath: {{ .Values.volumes.mountPath }}
+          env:
+            - name: TZ
+              value: {{ .Values.envVars.homeassistant.TZ }}

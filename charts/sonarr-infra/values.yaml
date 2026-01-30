@@ -1,0 +1,8 @@
+persistence:
+  enabled: true
+  size: 1Gi
+  name: sonarr-pv
+  storageClass: sonarr-local-path-retain
+
+app:
+  name: sonarr

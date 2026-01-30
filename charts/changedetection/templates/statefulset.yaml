@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "my-app.fullname" . }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "my-app.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "my-app.name" . }}
+    spec:
+      securityContext:
+        fsGroup: 0
+        runAsUser: 0
+        runAsGroup: 0
+        #fsGroupChangePolicy: "OnRootMismatch"
+      {{- if .Values.persistence.enabled }}
+      volumes:
+        - name: {{ include "my-app.name" . }}-data
+          persistentVolumeClaim:
+            claimName: {{ include "my-app.name" . }}-pvc
+            readOnly: false
+      {{- end }}
+      containers:
+        # Main container
+        - name: {{ include "my-app.name" . }}
+          image: "{{ .Values.image.main.repository }}:{{ .Values.image.main.tag }}"
+          imagePullPolicy: {{ .Values.image.main.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+
+          {{- if .Values.persistence.enabled }}
+          volumeMounts:
+            - name: {{ include "my-app.name" . }}-data
+              mountPath: {{ .Values.volumes.mountPath }}
+          {{- end }}
+
+          env:
+            - name: PLAYWRIGHT_DRIVER_URL
+              value: {{ .Values.envVars.changedetection.PLAYWRIGHT_DRIVER_URL }}
+            - name: TZ
+              value: {{ .Values.envVars.changedetection.TZ }}
+
+        # sidecar container
+        {{- if .Values.sidecar.enabled }}
+        - name: browserless
+          image: "{{ .Values.image.sidecar.repository }}:{{ .Values.image.sidecar.tag }}"
+          imagePullPolicy: {{ .Values.image.sidecar.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.sidecar.port }}
+          readinessProbe:
+            tcpSocket:
+              port: {{ .Values.sidecar.port }}
+          env:
+            - name: SCREEN_WIDTH
+              value: "{{ .Values.envVars.browserless.SCREEN_WIDTH }}"
+            - name: SCREEN_HEIGHT
+              value: "{{ .Values.envVars.browserless.SCREEN_HEIGHT }}"
+            - name: SCREEN_DEPTH
+              value: "{{ .Values.envVars.browserless.SCREEN_DEPTH }}"
+        {{- end }}

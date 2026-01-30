@@ -1,0 +1,112 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "owncloud.fullname" . }}
+  labels:
+    {{- include "owncloud.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ include "owncloud.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "owncloud.name" . }}
+    spec:
+      volumes:
+        - name: {{ include "owncloud.name" . }}-data
+          persistentVolumeClaim:
+            claimName: {{ include "owncloud.name" . }}-pvc
+            readOnly: false
+        - name: {{ include "owncloud.name" . }}-db-data
+          persistentVolumeClaim:
+            claimName: {{ include "owncloud.name" . }}-db-pvc
+            readOnly: false
+        - name: {{ include "owncloud.name" . }}-cache-data
+          persistentVolumeClaim:
+            claimName: {{ include "owncloud.name" . }}-cache-pvc
+            readOnly: false
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.owncloud.repository }}:{{ .Values.image.owncloud.tag }}"
+          imagePullPolicy: {{ .Values.image.owncloud.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.owncloud.port }}
+          volumeMounts:
+            - name: {{ include "owncloud.name" . }}-data
+              mountPath: {{ .Values.volumes.owncloud.mountPath }}
+          env:
+            - name: OWNCLOUD_DOMAIN
+              value: {{ .Values.envVars.owncloud.OWNCLOUD_DOMAIN }}
+            - name: OWNCLOUD_TRUSTED_DOMAINS
+              value: {{ .Values.envVars.owncloud.OWNCLOUD_TRUSTED_DOMAINS }}
+            - name: OWNCLOUD_DB_TYPE
+              value: {{ .Values.envVars.owncloud.OWNCLOUD_DB_TYPE }}
+            - name: OWNCLOUD_DB_HOST
+              value: {{ .Values.envVars.owncloud.OWNCLOUD_DB_HOST }}
+            - name: OWNCLOUD_DB_NAME
+              value: {{ .Values.envVars.owncloud.OWNCLOUD_DB_NAME }}
+            - name: OWNCLOUD_DB_UTF8MB4
+              value: {{ .Values.envVars.owncloud.UTF8MB4 }}
+            - name: OWNCLOUD_REDIS_ENABLED
+              value: {{ .Values.envVars.owncloud.OWNCLOUD_REDIS_ENABLED }}
+            - name: OWNCLOUD_REDIS_HOST
+              value: {{ .Values.envVars.owncloud.OWNCLOUD_REDIS_HOST }}
+            - name: HTTP_PORT
+              value: {{ .Values.envVars.owncloud.HTTP_PORT }}
+            - name: OWNCLOUD_DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: owncloud-credentials
+                  key: OWNCLOUD_DB_USERNAME
+            - name: OWNCLOUD_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: owncloud-credentials
+                  key: OWNCLOUD_DB_PASSWORD
+            - name: OWNCLOUD_ADMIN_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: owncloud-credentials
+                  key: OWNCLOUD_ADMIN_USERNAME
+            - name: OWNCLOUD_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: owncloud-credentials
+                  key: OWNCLOUD_ADMIN_PASSWORD
+
+        - name: {{ .Values.service.mariadb.name }}
+          image: "{{ .Values.image.mariadb.repository }}:{{ .Values.image.mariadb.tag }}"
+          imagePullPolicy: {{ .Values.image.mariadb.pullPolicy }}
+          volumeMounts:
+            - name: {{ include "owncloud.name" . }}-db-data
+              mountPath: {{ .Values.volumes.mariadb.mountPath }}
+          env:
+            - name: MARIADB_AUTO_UPGRADE
+              value: {{ .Values.envVars.mariadb.MARIADB_AUTO_UPGRADE }}
+            - name: MYSQL_DATABASE
+              value: {{ .Values.envVars.owncloud.OWNCLOUD_DB_NAME }}
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: owncloud-credentials
+                  key: MYSQL_ROOT_PASSWORD
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: owncloud-credentials
+                  key: OWNCLOUD_DB_USERNAME
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: owncloud-credentials
+                  key: OWNCLOUD_DB_PASSWORD
+
+        - name: {{ .Values.service.redis.name }}
+          image: "{{ .Values.image.redis.repository }}:{{ .Values.image.redis.tag }}"
+          imagePullPolicy: {{ .Values.image.redis.pullPolicy }}
+          volumeMounts:
+            - name: {{ include "owncloud.name" . }}-cache-data
+              mountPath: {{ .Values.volumes.redis.mountPath }}
+

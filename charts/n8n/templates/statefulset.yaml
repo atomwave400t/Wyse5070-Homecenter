@@ -1,0 +1,104 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "n8n.fullname" . }}
+  labels:
+    {{- include "n8n.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ include "n8n.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "n8n.name" . }}
+    spec:
+      volumes:
+        - name: {{ include "n8n.name" . }}-data
+          persistentVolumeClaim:
+            claimName: {{ include "n8n.name" . }}-pvc
+            readOnly: false
+        - name: {{ include "n8n.name" . }}-db-data
+          persistentVolumeClaim:
+            claimName: {{ include "n8n.name" . }}-db-pvc
+            readOnly: false
+        - name: {{ include "n8n.name" . }}-db-init-script
+          configMap:
+            name: {{ include "n8n.name" . }}-db-init-script
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+          volumeMounts:
+            - name: {{ include "n8n.name" . }}-data
+              mountPath: {{ .Values.volumes.n8n.mountPath }}
+          env:
+            - name: TZ
+              value: {{ .Values.envVars.n8n.TZ }}
+            - name: GENERIC_TIMEZONE
+              value: {{ .Values.envVars.n8n.TZ }}
+            - name: N8N_SECURE_COOKIE
+              value: {{ .Values.envVars.n8n.N8N_SECURE_COOKIE | quote }}
+            - name: N8N_PORT
+              value: {{ .Values.service.port | quote }}
+            - name: N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS
+              value: {{ .Values.envVars.n8n.N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS | quote }}
+            - name: N8N_RUNNERS_ENABLED
+              value: {{ .Values.envVars.n8n.N8N_RUNNERS_ENABLED | quote }}
+            - name: DB_TYPE
+              value: {{ .Values.envVars.n8n.DB_TYPE }}
+            - name: DB_POSTGRESDB_HOST
+              value: {{ .Values.envVars.n8n.DB_POSTGRESDB_HOST }}
+            - name: DB_POSTGRESDB_PORT
+              value: {{ .Values.envVars.n8n.DB_POSTGRESDB_PORT | quote }}
+            - name: DB_POSTGRESDB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: n8n-credentials
+                  key: POSTGRES_NON_ROOT_USER
+            - name: DB_POSTGRESDB_DATABASE
+              value: {{ .Values.envVars.n8n.DB_POSTGRESDB_DATABASE }}
+            - name: DB_POSTGRESDB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: n8n-credentials
+                  key: POSTGRES_NON_ROOT_PASSWORD
+
+        - name: {{ .Chart.Name }}-db
+          image: "{{ .Values.sidecar.repository }}:{{ .Values.sidecar.tag }}"
+          imagePullPolicy: {{ .Values.sidecar.pullPolicy }}
+          ports:
+            - name: postgres
+              containerPort: {{ .Values.envVars.n8n.DB_POSTGRESDB_PORT }}
+          volumeMounts:
+            - name: {{ include "n8n.name" . }}-db-data
+              mountPath: {{ .Values.volumes.postgres.mountPath.dbData }}
+            - name: {{ include "n8n.name" . }}-db-init-script
+              mountPath: {{ .Values.volumes.postgres.mountPath.dbInitScript }}
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.postgres.name }}
+                  key: POSTGRES_USER
+            - name: POSTGRES_DB
+              value: {{ .Values.envVars.n8n.DB_POSTGRESDB_DATABASE }}
+            - name: POSTGRES_NON_ROOT_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.postgres.name }}
+                  key: POSTGRES_NON_ROOT_USER
+            - name: POSTGRES_NON_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.postgres.name }}
+                  key: POSTGRES_NON_ROOT_PASSWORD
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.postgres.name }} 
+                  key: POSTGRES_PASSWORD
+
