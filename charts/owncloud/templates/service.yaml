@@ -2,6 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "owncloud.fullname" . }}
+  namespace: {{ include "owncloud.name" . }}
   labels:
     app: {{ include "owncloud.name" . }}
 spec:

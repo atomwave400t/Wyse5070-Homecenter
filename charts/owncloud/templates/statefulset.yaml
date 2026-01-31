@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: {{ include "owncloud.fullname" . }}
+  namespace: {{ include "owncloud.name" . }}
   labels:
     {{- include "owncloud.labels" . | nindent 4 }}
 spec:

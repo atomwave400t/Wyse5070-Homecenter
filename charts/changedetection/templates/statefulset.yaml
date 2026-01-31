@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: {{ include "my-app.fullname" . }}
+  namespace: {{ include "my-app.name" . }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:

@@ -2,6 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "my-app.fullname" . }}
+  namespace: {{ include "my-app.name" . }}
   labels:
     app: {{ include "my-app.name" . }}
 spec:
