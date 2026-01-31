@@ -33,13 +33,13 @@ dnf install helm
 cd $current_dir/../charts/
 
 #install volume charts first. All of these should have "infra" suffix
-for chart in `ls grep "-infra"`
+for chart in `ls | grep "-infra"`
 do
 	echo "helm install $chart ./$chart"
 done
 
 #and then install rest of these
-for chart in `ls grep -v "-infra"`
+for chart in `ls | grep -v "-infra"`
 do
         echo "helm install $chart ./$chart"
 done
