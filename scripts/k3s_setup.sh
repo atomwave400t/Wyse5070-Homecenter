@@ -1,5 +1,15 @@
 #!/bin/bash
 
+dnf install tar -y
+curl -fsSL -o /tmp/get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-4
+chmod 700 /tmp/get_helm.sh
+/tmp/get_helm.sh
+
+#install k3s with flannel backend
+curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server --flannel-backend vxlan" sh -s - && echo "k3s installed!" || echo "Couldn't install k3s!" && exit 1
+
+export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
+
 filename=$0
 current_dir=`realpath "$filename" | sed -E "s/\/\w+\.sh//g"`
 
@@ -19,27 +29,36 @@ data_directories="
 /opt/radarr-data
 "
 
-#precreate data directories for pvs and config their selinux context
+#install nginx ingress
+helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+helm repo update
+helm install ingress-nginx ingress-nginx/ingress-nginx   --namespace ingress-nginx   --create-namespace   --set controller.service.type=LoadBalancer
+
+#install metallb
+kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.14.5/config/manifests/metallb-native.yaml
+sleep 60
+kubectl apply -f ../charts/loadbalancer-chart/metallb-pool.yaml
+
+#precreate data directories for pvs and config their selinux context:
 for directory in $data_directories
 do
-	#mkdir $directory && echo "Directory $directory created!" || echo "Directory $directory not created! check permissions or use sudo."
-	#chcon -R -t svirt_sandbox_file_t $directory echo $directory && echo "Directory $directory context changed!" || echo "Directory $directory not changed!"
-	echo "mkdir $directory"
+	mkdir $directory && echo "Directory $directory created!" || echo "ERROR !Directory $directory not created! check permissions or use sudo." && exit 1
+	chcon -R -t svirt_sandbox_file_t $directory echo $directory && echo "Directory $directory context changed!" || echo "ERROR! Directory $directory not changed!" && exit 1
 done
 
-#install helm to install helmcharts
-dnf install helm
-
 cd $current_dir/../charts/
+
+
+#and then install rest of these(except loadbalancer)
+for chart in `ls | grep -v '\-infra' | grep -vi loadbalancer`
+do
+        helm install $chart ./$chart  ||  echo "ERROR! Chart $chart couldn't be deployed!" && exit 1
+done
 
 #install volume charts first. All of these should have "infra" suffix
 for chart in `ls | grep '\-infra'`
 do
-	echo "helm install $chart ./$chart"
+	helm install $chart ./$chart ||  echo "ERROR! Chart $chart couldn't be deployed!" && exit 1
 done
 
-#and then install rest of these
-for chart in `ls | grep -v '\-infra'`
-do
-        echo "helm install $chart ./$chart"
-done
+
