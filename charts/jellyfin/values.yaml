@@ -36,29 +36,29 @@ service:
   jellyfin:
     port: 8096
     udpPort: 7359
-    url: "http://jellyfin-test.krz.home"
+    url: "http://jellyfin.krz.home"
 
   jackett:
     port: 9117
     name: "jackett"
-    hostname: "jackett-test.krz.home"
+    hostname: "jackett.krz.home"
 
   sonarr:
     port: 8989
     name: "sonarr"
-    hostname: "sonarr-test.krz.home"
+    hostname: "sonarr.krz.home"
 
   radarr:
     port: 7878
     name: "radarr"
-    hostname: "radarr-test.krz.home"
+    hostname: "radarr.krz.home"
 
   type: ClusterIP
 
 # This block is for setting up the ingress for more information can be found here: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ingress:
   enabled: true
-  host: "jellyfin-test.krz.home"
+  host: "jellyfin.krz.home"
   className: nginx
   annotations:
     nginx.ingress.kubernetes.io/backend-protocol: "HTTP"

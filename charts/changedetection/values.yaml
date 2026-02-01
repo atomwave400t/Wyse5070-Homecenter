@@ -17,7 +17,7 @@ sidecar:
 
 ingress:
   enabled: true
-  host: "changedetection-test.krz.home"
+  host: "changedetection.krz.home"
   className: nginx
   annotations:
     nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
