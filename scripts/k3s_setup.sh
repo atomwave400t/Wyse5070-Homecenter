@@ -60,6 +60,9 @@ done
 
 cd $current_dir/../charts/
 
+helm install namespaces ./namespaces && echo "Namespaces installed!"
+
+sleep 5
 
 kubectl create secret generic n8n-credentials -n n8n  \
     --from-literal=POSTGRES_NON_ROOT_USER=n8n \
@@ -72,7 +75,6 @@ kubectl create secret generic owncloud-credentials -n owncloud \
     --from-literal=OWNCLOUD_DB_USERNAME=owncloud \
     --from-literal=OWNCLOUD_DB_PASSWORD=$OWNCLOUD_DB_PASSWORD && echo "Owncloud credentials loaded!"
 
-helm install namespaces ./namespaces && echo "Namespaces installed!"
 
 sleep 20
 
