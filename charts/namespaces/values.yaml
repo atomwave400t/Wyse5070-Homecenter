@@ -1,0 +1,7 @@
+namespaces:
+  - name: changedetection
+  - name: homeassistant
+  - name: jellyfin
+  - name: n8n
+  - name: owncloud
+

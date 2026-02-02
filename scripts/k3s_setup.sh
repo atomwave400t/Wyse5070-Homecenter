@@ -49,14 +49,18 @@ done
 
 cd $current_dir/../charts/
 
+helm install namespaces ./namespaces
+
+sleep 5
+
 #install volume charts first. All of these should have "infra" suffix
 for chart in `ls | grep '\-infra'`
 do
         helm install $chart ./$chart ||  (echo "ERROR! Chart $chart couldn't be deployed!" && exit 1)
 done
 
-#and then install rest of these(except loadbalancer)
-for chart in `ls | grep -v '\-infra' | grep -vi loadbalancer`
+#and then install rest of these(except loadbalancer and previously created namespaces)
+for chart in `ls | grep -v '\-infra' | grep -vi loadbalancer | grep -vi namespaces`
 do
         helm install $chart ./$chart  ||  (echo "ERROR! Chart $chart couldn't be deployed!" && exit 1)
 done
