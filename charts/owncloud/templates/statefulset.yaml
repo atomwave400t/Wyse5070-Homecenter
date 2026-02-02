@@ -51,11 +51,11 @@ spec:
             - name: OWNCLOUD_DB_UTF8MB4
               value: {{ .Values.envVars.owncloud.UTF8MB4 }}
             - name: OWNCLOUD_REDIS_ENABLED
-              value: {{ .Values.envVars.owncloud.OWNCLOUD_REDIS_ENABLED }}
+              value: {{ .Values.envVars.owncloud.OWNCLOUD_REDIS_ENABLED | quote }}
             - name: OWNCLOUD_REDIS_HOST
               value: {{ .Values.envVars.owncloud.OWNCLOUD_REDIS_HOST }}
             - name: HTTP_PORT
-              value: {{ .Values.envVars.owncloud.HTTP_PORT }}
+              value: {{ .Values.envVars.owncloud.HTTP_PORT | quote }}
             - name: OWNCLOUD_DB_USERNAME
               valueFrom:
                 secretKeyRef:
@@ -85,7 +85,7 @@ spec:
               mountPath: {{ .Values.volumes.mariadb.mountPath }}
           env:
             - name: MARIADB_AUTO_UPGRADE
-              value: {{ .Values.envVars.mariadb.MARIADB_AUTO_UPGRADE }}
+              value: {{ .Values.envVars.mariadb.MARIADB_AUTO_UPGRADE | quote }}
             - name: MYSQL_DATABASE
               value: {{ .Values.envVars.owncloud.OWNCLOUD_DB_NAME }}
             - name: MYSQL_ROOT_PASSWORD
