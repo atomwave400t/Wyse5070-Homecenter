@@ -5,6 +5,12 @@ read -s -p "Enter password for root postgres(n8n): " POSTGRES_PASSWORD
 read -s -p "Enter password for root mysql(owncloud): " MYSQL_ROOT_PASSWORD
 read -s -p "Enter password for non root mysql user(owncloud): " OWNCLOUD_DB_PASSWORD
 
+#setup firewalld
+firewall-cmd --permanent --add-port=6443/tcp #apiserver
+firewall-cmd --permanent --zone=trusted --add-source=10.42.0.0/16 #pods
+firewall-cmd --permanent --zone=trusted --add-source=10.43.0.0/16 #services
+firewall-cmd --reload
+
 export PATH="$PATH:/usr/local/bin"
 dnf install tar -y
 curl -fsSL -o /tmp/get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-4
@@ -55,13 +61,13 @@ done
 cd $current_dir/../charts/
 
 
-kubectl create secret generic n8n-credentials  \
+kubectl create secret generic n8n-credentials -n n8n  \
     --from-literal=POSTGRES_NON_ROOT_USER=n8n \
     --from-literal=POSTGRES_NON_ROOT_PASSWORD=$POSTGRES_NON_ROOT_PASSWORD \
     --from-literal=POSTGRES_USER=root \
     --from-literal=POSTGRES_PASSWORD=$POSTGRES_PASSWORD \  && echo "n8n credentials loaded!"
 
-kubectl create secret generic owncloud-credentials  \
+kubectl create secret generic owncloud-credentials -n owncloud \
     --from-literal=MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD \
     --from-literal=OWNCLOUD_DB_USERNAME=owncloud \
     --from-literal=OWNCLOUD_DB_PASSWORD=$OWNCLOUD_DB_PASSWORD && echo "Owncloud credentials loaded!"
