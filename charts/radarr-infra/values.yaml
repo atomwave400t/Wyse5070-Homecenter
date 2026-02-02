@@ -6,3 +6,4 @@ persistence:
 
 app:
   name: radarr
+  namespace: jellyfin

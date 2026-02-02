@@ -6,3 +6,4 @@ persistence:
 
 app:
   name: owncloud-db
+  namespace: owncloud
