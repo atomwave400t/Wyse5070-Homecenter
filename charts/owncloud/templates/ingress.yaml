@@ -34,5 +34,5 @@ spec:
               service:
                 name: {{ include "owncloud.fullname" $ }}
                 port:
-                  number: {{ $.Values.service.port }}
+                  number: {{ $.Values.service.owncloud.port }}
 {{- end }}
