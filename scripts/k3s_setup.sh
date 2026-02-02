@@ -1,5 +1,10 @@
 #!/bin/bash
 
+read -s -p "Enter password for postgres user(n8n): " POSTGRES_NON_ROOT_PASSWORD
+read -s -p "Enter password for root postgres(n8n): " POSTGRES_PASSWORD
+read -s -p "Enter password for root mysql(owncloud): " MYSQL_ROOT_PASSWORD
+read -s -p "Enter password for non root mysql user(owncloud): " OWNCLOUD_DB_PASSWORD
+
 export PATH="$PATH:/usr/local/bin"
 dnf install tar -y
 curl -fsSL -o /tmp/get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-4
@@ -49,7 +54,19 @@ done
 
 cd $current_dir/../charts/
 
-helm install namespaces ./namespaces
+
+kubectl create secret generic n8n-credentials  \
+    --from-literal=POSTGRES_NON_ROOT_USER=n8n \
+    --from-literal=POSTGRES_NON_ROOT_PASSWORD=$POSTGRES_NON_ROOT_PASSWORD \
+    --from-literal=POSTGRES_USER=root \
+    --from-literal=POSTGRES_PASSWORD=$POSTGRES_PASSWORD \  && echo "n8n credentials loaded!"
+
+kubectl create secret generic owncloud-credentials  \
+    --from-literal=MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD \
+    --from-literal=OWNCLOUD_DB_USERNAME=owncloud \
+    --from-literal=OWNCLOUD_DB_PASSWORD=$OWNCLOUD_DB_PASSWORD && echo "Owncloud credentials loaded!"
+
+helm install namespaces ./namespaces && echo "Namespaces installed!"
 
 sleep 20
 
