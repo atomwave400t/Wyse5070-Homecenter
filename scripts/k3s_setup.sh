@@ -68,7 +68,7 @@ kubectl create secret generic n8n-credentials -n n8n  \
     --from-literal=POSTGRES_NON_ROOT_USER=n8n \
     --from-literal=POSTGRES_NON_ROOT_PASSWORD=$POSTGRES_NON_ROOT_PASSWORD \
     --from-literal=POSTGRES_USER=root \
-    --from-literal=POSTGRES_PASSWORD=$POSTGRES_PASSWORD \  && echo "n8n credentials loaded!"
+    --from-literal=POSTGRES_PASSWORD=$POSTGRES_PASSWORD  && echo "n8n credentials loaded!"
 
 kubectl create secret generic owncloud-credentials -n owncloud \
     --from-literal=MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD \
