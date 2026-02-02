@@ -51,7 +51,7 @@ cd $current_dir/../charts/
 
 helm install namespaces ./namespaces
 
-sleep 5
+sleep 20
 
 #install volume charts first. All of these should have "infra" suffix
 for chart in `ls | grep '\-infra'`
