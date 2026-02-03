@@ -35,5 +35,4 @@ spec:
                 name: {{ include "n8n.fullname" $ }}
                 port:
                   number: {{ $.Values.service.port }}
-        use_x_forwarded_for: true
 {{- end }}

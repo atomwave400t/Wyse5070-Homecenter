@@ -68,5 +68,4 @@ spec:
                 name: {{ include "jellyfin.fullname" $ }}
                 port:
                   number: {{ $.Values.service.radarr.port }}
-        use_x_forwarded_for: true
 {{- end }}
