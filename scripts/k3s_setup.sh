@@ -45,6 +45,7 @@ data_directories="
 /opt/sonarr-data
 /opt/radarr-data
 "
+cd $current_dir
 
 #install nginx ingress
 helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
