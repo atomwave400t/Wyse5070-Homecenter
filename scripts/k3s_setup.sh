@@ -80,8 +80,8 @@ kubectl create secret generic n8n-credentials -n n8n  \
 kubectl create secret generic owncloud-credentials -n owncloud \
     --from-literal=MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD \
     --from-literal=OWNCLOUD_DB_USERNAME=owncloud \
-    --from-literal=OWNCLOUD_ADMIN_USERNAME=admin
-    --from-literal=OWNCLOUD_ADMIN_PASSWORD=$OWNCLOUD_ADMIN_PASSWORD
+    --from-literal=OWNCLOUD_ADMIN_USERNAME=admin \
+    --from-literal=OWNCLOUD_ADMIN_PASSWORD=$OWNCLOUD_ADMIN_PASSWORD \
     --from-literal=OWNCLOUD_DB_PASSWORD=$OWNCLOUD_DB_PASSWORD && echo "Owncloud credentials loaded!"
 
 
