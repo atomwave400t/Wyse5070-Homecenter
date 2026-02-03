@@ -35,7 +35,6 @@ spec:
                 name: {{ include "jellyfin.fullname" $ }}
                 port:
                   number: {{ $.Values.service.jellyfin.port }}
-        use_x_forwarded_for: true
     - host: {{ $.Values.service.jackett.hostname }}
       http:
         paths:
@@ -46,7 +45,6 @@ spec:
                 name: {{ include "jellyfin.fullname" $ }}
                 port:
                   number: {{ $.Values.service.jackett.port }}
-        use_x_forwarded_for: true
     - host: {{ $.Values.service.sonarr.hostname }}
       http:
         paths:
@@ -57,7 +55,6 @@ spec:
                 name: {{ include "jellyfin.fullname" $ }}
                 port:
                   number: {{ $.Values.service.sonarr.port }}
-        use_x_forwarded_for: true
     - host: {{ $.Values.service.radarr.hostname }}
       http:
         paths:
