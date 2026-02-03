@@ -61,7 +61,9 @@ for directory in $data_directories
 do
         mkdir $directory && echo "Directory $directory created!" || (echo "ERROR !Directory $directory not created! check permissions or use sudo." && exit 1)
         chcon -R -t svirt_sandbox_file_t $directory && echo "Directory $directory context changed!" || (echo "ERROR! Directory $directory not changed!" && exit 1)
+	chmod +022 $directory
 done
+
 
 cd $current_dir/../charts/
 
