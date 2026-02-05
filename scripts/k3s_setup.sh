@@ -114,4 +114,5 @@ echo "  trusted_proxies:" >> $ha_config
 echo "    - 127.0.0.1" >> $ha_config
 echo "    - ::1" >> $ha_config
 echo "    - 10.42.0.0/24" >> $ha_config
+kubectl -n homeassistant rollout restart statefulsets
 
