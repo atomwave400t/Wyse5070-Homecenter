@@ -100,3 +100,18 @@ do
         helm install $chart ./$chart  ||  (echo "ERROR! Chart $chart couldn't be deployed!" && exit 1)
 done
 
+ha_config="/opt/homeassistant-data/configuration.yaml"
+#wait for /opt/homeassistant-data/configuration.yaml to appear
+while [[ !(-f $ha_config ) ]]
+do
+	sleep 1
+	echo "Waiting for $ha_config to appear..."
+done
+
+echo "http:" >> $ha_config
+echo "  use_x_forwarded_for: true" >> $ha_config
+echo "  trusted_proxies:" >> $ha_config
+echo "    - 127.0.0.1" >> $ha_config
+echo "    - ::1" >> $ha_config
+echo "    - 10.42.0.0/24" >> $ha_config
+
