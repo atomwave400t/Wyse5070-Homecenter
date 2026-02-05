@@ -47,6 +47,7 @@ envVars:
     OWNCLOUD_DOMAIN: localhost:8080
     OWNCLOUD_TRUSTED_DOMAINS: krz.home 
     OWNCLOUD_DB_TYPE: mysql
+    OWNCLOUD_DB_NAME: owncloud
     OWNCLOUD_DB_HOST: 127.0.0.1
     OWNCLOUD_DB_UTF8MB4: true
     OWNCLOUD_REDIS_HOST: localhost
