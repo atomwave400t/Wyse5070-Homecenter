@@ -59,7 +59,7 @@ envVars:
 
 volumes:
   owncloud:
-    mountPath: /config
+    mountPath: /mnt/data
   mariadb:
     mountPath: /var/lib/mysql
   redis:
