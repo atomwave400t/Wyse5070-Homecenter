@@ -39,6 +39,10 @@ spec:
           persistentVolumeClaim:
             claimName: {{ .Values.service.radarr.name }}-pvc
             readOnly: false
+        - name: {{ .Values.service.qbittorrent.name }}-data
+          persistentVolumeClaim:
+            claimName: {{ .Values.service.qbittorrent.name }}-pvc
+            readOnly: false
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.jellyfin.repository }}:{{ .Values.image.jellyfin.tag }}"
@@ -106,3 +110,30 @@ spec:
           env:
             - name: TZ
               value: {{ .Values.envVars.common.TZ }}
+                  - name: {{ .Values.service.radarr.name }}
+
+        - image: "{{ .Values.image.qbittorrent.repository }}:{{ .Values.image.qbittorrent.tag }}"
+          imagePullPolicy: {{ .Values.image.qbittorrent.pullPolicy }}
+          ports:
+            - name: {{ .Values.service.qbittorrent.name }}
+              containerPort: {{ .Values.service.qbittorrent.port }}
+            - name: {{ .Values.service.qbittorrent.name }}
+              containerPort: {{ .Values.service.qbittorrent.udpPort }}
+              protocol: UDP
+          volumeMounts:
+            - name: {{ .Values.service.qbittorrent.name }}-data
+              mountPath: {{ .Values.volumes.qbittorrent.mountPath.config }}
+            - name: {{ include "jellyfin.name" . }}-media-data
+              #Qbittorrent needs to download files to the same directory the jellyfin uses to expose them
+              mountPath: {{ .Values.volumes.jellyfin.mountPath.media }}
+          env:
+            - name: TZ
+              value: {{ .Values.envVars.common.TZ }}
+            - name: PGID
+              value: {{ .Values.envVars.qbittorrent.PGID }}
+            - name: PUID
+              value: {{ .Values.envVars.qbittorrent.PUID }}
+            - name: WEBUI_PORT
+              value: {{ .Values.service.qbittorrent.port }}
+            - name: TORRENTING_PORT
+              value: {{ .Values.service.qbittorrent.udpPort }}
