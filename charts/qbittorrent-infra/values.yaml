@@ -1,0 +1,9 @@
+persistence:
+  enabled: true
+  size: 1Gi
+  name: qbittorrent-pv
+  storageClass: hass-local-path-retain
+
+app:
+  name: qbittorrent
+  namespace: jellyfin
