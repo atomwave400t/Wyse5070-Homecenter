@@ -65,4 +65,14 @@ spec:
                 name: {{ include "jellyfin.fullname" $ }}
                 port:
                   number: {{ $.Values.service.radarr.port }}
+    - host: {{ $.Values.service.qbittorrent.hostname }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "jellyfin.fullname" $ }}
+                port:
+                  number: {{ $.Values.service.qbittorrent.port }}
 {{- end }}

@@ -29,6 +29,11 @@ image:
     # Overrides the image tag whose default is the chart appVersion.
     tag: "latest"
 
+  qbittorrent:
+    repository: "lscr.io/linuxserver/qbittorrent:latest"
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "latest"
 
 # This is for setting up a service more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/
 service:
@@ -53,6 +58,11 @@ service:
     name: "radarr"
     hostname: "radarr.krz.home"
 
+  qbittorrent:
+    port: 6880
+    udpPort: 6881
+    name: "qbittorrent"
+    hostname: "qbittorrent.krz.home"
   type: ClusterIP
 
 # This block is for setting up the ingress for more information can be found here: https://kubernetes.io/docs/concepts/services-networking/ingress/
@@ -83,3 +93,7 @@ volumes:
   radarr:
     mountPath: 
       config: /config
+  qbittorrent:
+    mountPath:
+      config: /config
+      media: /downloads

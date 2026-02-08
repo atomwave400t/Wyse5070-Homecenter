@@ -29,5 +29,13 @@ spec:
       port: {{ .Values.service.radarr.port }}
       targetPort: {{ .Values.service.radarr.name }}
       protocol: TCP
+    - name: {{ .Values.service.qbittorrent.name }}
+      port: {{ .Values.service.qbittorrent.port }}
+      targetPort: {{ .Values.service.qbittorrent.name }}
+      protocol: TCP
+    - name: qbittorrent-udp-port
+      port: {{ .Values.service.qbittorrent.udpPort }}
+      targetPort:  {{ .Values.service.qbittorrent.udpPort }}
+      protocol: UDP
   selector:
     app: {{ include "jellyfin.name" . }}
