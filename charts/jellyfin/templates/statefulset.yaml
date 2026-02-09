@@ -110,7 +110,6 @@ spec:
           env:
             - name: TZ
               value: {{ .Values.envVars.common.TZ }}
-                  - name: {{ .Values.service.radarr.name }}
 
         - image: "{{ .Values.image.qbittorrent.repository }}:{{ .Values.image.qbittorrent.tag }}"
           imagePullPolicy: {{ .Values.image.qbittorrent.pullPolicy }}
@@ -130,10 +129,10 @@ spec:
             - name: TZ
               value: {{ .Values.envVars.common.TZ }}
             - name: PGID
-              value: {{ .Values.envVars.qbittorrent.PGID }}
+              value: {{ .Values.envVars.qbittorrent.PGID | quote }}
             - name: PUID
-              value: {{ .Values.envVars.qbittorrent.PUID }}
+              value: {{ .Values.envVars.qbittorrent.PUID | quote }}
             - name: WEBUI_PORT
-              value: {{ .Values.service.qbittorrent.port }}
+              value: {{ .Values.service.qbittorrent.port | quote }}
             - name: TORRENTING_PORT
-              value: {{ .Values.service.qbittorrent.udpPort }}
+              value: {{ .Values.service.qbittorrent.udpPort | quote }}
