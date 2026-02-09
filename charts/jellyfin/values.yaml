@@ -30,7 +30,7 @@ image:
     tag: "latest"
 
   qbittorrent:
-    repository: "lscr.io/linuxserver/qbittorrent:latest"
+    repository: "lscr.io/linuxserver/qbittorrent"
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
     tag: "latest"
