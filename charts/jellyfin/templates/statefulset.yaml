@@ -117,7 +117,7 @@ spec:
           ports:
             - name: {{ .Values.service.qbittorrent.name }}
               containerPort: {{ .Values.service.qbittorrent.port }}
-            - name: qbittorrent-udp-port
+            - name: qb-udp-port
               containerPort: {{ .Values.service.qbittorrent.udpPort }}
               protocol: UDP
           volumeMounts:

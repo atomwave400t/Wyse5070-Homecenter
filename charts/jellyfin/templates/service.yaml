@@ -33,7 +33,7 @@ spec:
       port: {{ .Values.service.qbittorrent.port }}
       targetPort: {{ .Values.service.qbittorrent.name }}
       protocol: TCP
-    - name: qbittorrent-udp-port
+    - name: qb-udp-port
       port: {{ .Values.service.qbittorrent.udpPort }}
       targetPort:  {{ .Values.service.qbittorrent.udpPort }}
       protocol: UDP
