@@ -43,6 +43,10 @@ spec:
           persistentVolumeClaim:
             claimName: {{ .Values.service.qbittorrent.name }}-pvc
             readOnly: false
+        - name: {{ .Values.service.qbittorrent.name }}-downloads-data
+          persistentVolumeClaim:
+          claimName: {{ .Values.service.qbittorrent.name }}-downloads-pvc
+          readOnly: false
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.jellyfin.repository }}:{{ .Values.image.jellyfin.tag }}"
@@ -91,6 +95,8 @@ spec:
             - name: {{ include "jellyfin.name" . }}-media-data
               #Sonarr needs to download files to the same directory the jellyfin uses to expose them
               mountPath: {{ .Values.volumes.jellyfin.mountPath.media }}
+            - name: {{ .Values.service.qbittorrent.name }}-downloads-data
+              mountPath: {{ .Values.volumes.qbittorrent.mountPath.downloads }}
           env:
             - name: TZ
               value: {{ .Values.envVars.common.TZ }}
@@ -107,6 +113,8 @@ spec:
             - name: {{ include "jellyfin.name" . }}-media-data
               #Radarr needs to download files to the same directory the jellyfin uses to expose them
               mountPath: {{ .Values.volumes.jellyfin.mountPath.media }}
+            - name: {{ .Values.service.qbittorrent.name }}-downloads-data
+              mountPath: {{ .Values.volumes.qbittorrent.mountPath.downloads }}
           env:
             - name: TZ
               value: {{ .Values.envVars.common.TZ }}
@@ -123,9 +131,8 @@ spec:
           volumeMounts:
             - name: {{ .Values.service.qbittorrent.name }}-data
               mountPath: {{ .Values.volumes.qbittorrent.mountPath.config }}
-            - name: {{ include "jellyfin.name" . }}-media-data
-              #Qbittorrent needs to download files to the same directory the jellyfin uses to expose them
-              mountPath: {{ .Values.volumes.jellyfin.mountPath.media }}
+            - name: {{ .Values.service.qbittorrent.name }}-downloads-data
+              mountPath: {{ .Values.volumes.qbittorrent.mountPath.downloads }}
           env:
             - name: TZ
               value: {{ .Values.envVars.common.TZ }}

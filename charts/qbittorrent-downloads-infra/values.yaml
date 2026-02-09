@@ -1,0 +1,9 @@
+persistence:
+  enabled: true
+  size: 1Gi
+  name: qbittorrent-downloads-pv
+  storageClass: qbittorrent-downloads-local-path-retain
+
+app:
+  name: qbittorrent-downloads
+  namespace: jellyfin

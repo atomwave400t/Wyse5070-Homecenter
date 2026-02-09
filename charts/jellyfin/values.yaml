@@ -99,4 +99,4 @@ volumes:
   qbittorrent:
     mountPath:
       config: /config
-      media: /downloads
+      downloads: /downloads
