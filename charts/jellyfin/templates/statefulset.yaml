@@ -111,7 +111,8 @@ spec:
             - name: TZ
               value: {{ .Values.envVars.common.TZ }}
 
-        - image: "{{ .Values.image.qbittorrent.repository }}:{{ .Values.image.qbittorrent.tag }}"
+            - name: {{ .Values.service.qbittorrent.name }}
+          image: "{{ .Values.image.qbittorrent.repository }}:{{ .Values.image.qbittorrent.tag }}"
           imagePullPolicy: {{ .Values.image.qbittorrent.pullPolicy }}
           ports:
             - name: {{ .Values.service.qbittorrent.name }}
