@@ -45,8 +45,8 @@ spec:
             readOnly: false
         - name: {{ .Values.service.qbittorrent.name }}-downloads-data
           persistentVolumeClaim:
-          claimName: {{ .Values.service.qbittorrent.name }}-downloads-pvc
-          readOnly: false
+            claimName: {{ .Values.service.qbittorrent.name }}-downloads-pvc
+            readOnly: false
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.jellyfin.repository }}:{{ .Values.image.jellyfin.tag }}"
