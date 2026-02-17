@@ -33,6 +33,14 @@ spec:
       port: {{ .Values.service.qbittorrent.port }}
       targetPort: {{ .Values.service.qbittorrent.name }}
       protocol: TCP
+    - name: {{ .Values.service.bookshelf.name }}
+      port: {{ .Values.service.bookshelf.port }}
+      targetPort: {{ .Values.service.bookshelf.name }}
+      protocol: TCP
+    - name: {{ .Values.service.readingglasses.name }}
+      port: {{ .Values.service.readingglasses.port }}
+      targetPort: {{ .Values.service.readingglasses.name }}
+      protocol: TCP
     - name: qb-udp-port
       port: {{ .Values.service.qbittorrent.udpPort }}
       targetPort:  {{ .Values.service.qbittorrent.udpPort }}

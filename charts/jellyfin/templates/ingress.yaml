@@ -75,4 +75,24 @@ spec:
                 name: {{ include "jellyfin.fullname" $ }}
                 port:
                   number: {{ $.Values.service.qbittorrent.port }}
+    - host: {{ $.Values.service.readingglasses.hostname }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "jellyfin.fullname" $ }}
+                port:
+                  number: {{ $.Values.service.readingglasses.port }}
+    - host: {{ $.Values.service.bookshelf.hostname }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "jellyfin.fullname" $ }}
+                port:
+                  number: {{ $.Values.service.bookshelf.port }}
 {{- end }}

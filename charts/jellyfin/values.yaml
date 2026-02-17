@@ -35,6 +35,24 @@ image:
     # Overrides the image tag whose default is the chart appVersion.
     tag: "latest"
 
+  bookshelf:
+    repository: "ghcr.io/pennydreadful/bookshelf"
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "hardcover"
+
+  rreadingglasses:
+    repository: "blampe/rreading-glasses"
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "latest"
+
+  rreadingglassesdb:
+    repository: "postgres"
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "17"
+
 # This is for setting up a service more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/
 service:
   # This sets the ports more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#field-spec-ports
@@ -63,6 +81,21 @@ service:
     udpPort: 6881
     name: "qbittorrent"
     hostname: "qbittorrent.krz.home"
+
+  bookshelf:
+    port: 8787
+    name: "bookshelf"
+    hostname: "bookshelf.krz.home"
+
+  readingglasses:
+    port: 8788
+    name: "reading-glasses"
+    hostname: "reading-glasses.krz.home"
+
+  readingglassesdb:
+    port: 5432
+    name: "reading-glassesdb"
+
   type: ClusterIP
 
 # This block is for setting up the ingress for more information can be found here: https://kubernetes.io/docs/concepts/services-networking/ingress/
@@ -80,6 +113,13 @@ envVars:
   qbittorrent:
     PUID: "1000"
     PGID: "1000"
+  rreadingglasses:
+    POSTGRES_HOST: "localhost"
+    POSTGRES_DATABASE: "rreading-glasses"
+    POSTGRES_USER: "rreading-glasses"
+  rreadingglassesdb:
+    POSTGRES_DB: "rreading-glasses"
+    POSTGRES_USER: "rreading-glasses"
 
 volumes:
   jellyfin:
@@ -100,3 +140,9 @@ volumes:
     mountPath:
       config: /config
       downloads: /downloads
+  readingglasses:
+    mountPath:
+      config: /
+  readingglassesdb:
+    mountPath:
+      dbData: /var/lib/postgresql/data

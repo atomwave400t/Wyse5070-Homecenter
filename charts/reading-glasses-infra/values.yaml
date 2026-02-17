@@ -1,0 +1,9 @@
+persistence:
+  enabled: true
+  size: 1Gi
+  name: reading-glasses-pv
+  storageClass: reading-glasses-local-path-retain
+
+app:
+  name: reading-glasses
+  namespace: jellyfin

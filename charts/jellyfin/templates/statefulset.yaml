@@ -47,6 +47,18 @@ spec:
           persistentVolumeClaim:
             claimName: {{ .Values.service.qbittorrent.name }}-downloads-pvc
             readOnly: false
+        - name: {{ .Values.service.bookshelf.name }}-data
+          persistentVolumeClaim:
+            claimName: {{ .Values.service.bookshelf.name }}-pvc
+            readOnly: false
+        - name: {{ .Values.service.rreadingglasses.name }}-data
+          persistentVolumeClaim:
+            claimName: {{ .Values.service.rreadingglasses.name }}-pvc
+            readOnly: false
+        - name: {{ .Values.service.rreadingglasses.name }}-db-data
+          persistentVolumeClaim:
+            claimName: {{ .Values.service.rreadingglasses.name }}-db-pvc
+            readOnly: false
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.jellyfin.repository }}:{{ .Values.image.jellyfin.tag }}"
@@ -144,3 +156,57 @@ spec:
               value: {{ .Values.service.qbittorrent.port | quote }}
             - name: TORRENTING_PORT
               value: {{ .Values.service.qbittorrent.udpPort | quote }}
+
+        - name: {{ .Values.service.bookshelf.name }}
+          image: "{{ .Values.image.bookshelf.repository }}:{{ .Values.image.bookshelf.tag }}"
+          imagePullPolicy: {{ .Values.image.bookshelf.pullPolicy }}
+          ports:
+            - name: {{ .Values.service.bookshelf.name }}
+              containerPort: {{ .Values.service.bookshelf.port }}
+          volumeMounts:
+            - name: {{ .Values.service.bookshelf.name }}-data
+              mountPath: {{ .Values.volumes.bookshelf.mountPath.config }}
+            - name: {{ .Values.service.qbittorrent.name }}-downloads-data
+              mountPath: {{ .Values.volumes.qbittorrent.mountPath.downloads }}
+
+        - name: {{ .Values.service.readingglasses.name }}
+          image: "{{ .Values.image.readingglasses.repository }}:{{ .Values.image.readingglasses.tag }}"
+          imagePullPolicy: {{ .Values.image.readingglasses.pullPolicy }}
+          ports:
+            - name: {{ .Values.service.readingglasses.name }}
+              containerPort: {{ .Values.service.readingglasses.port }}
+          volumeMounts:
+            - name: {{ .Values.service.readingglasses.name }}-data
+              mountPath: {{ .Values.volumes.readingglasses.mountPath.config }}
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: rreading-glasses-credentials
+                  key: POSTGRES_PASSWORD
+            - name: POSTGRES_HOST
+              value: {{ .Values.envVars.rreadingglasses.POSTGRES_HOST }}
+            - name: POSTGRES_DATABASE
+              value: {{ .Values.envVars.rreadingglasses.POSTGRES_DATABASE }}
+            - name: POSTGRES_USER
+              value: {{ .Values.envVars.rreadingglasses.POSTGRES_USER }}
+
+        - name: {{ .Values.service.readingglassesdb.name }}
+          image: "{{ .Values.image.readingglassesdb.repository }}:{{ .Values.image.readingglassesdb.tag }}"
+          imagePullPolicy: {{ .Values.image.readingglassesdb.pullPolicy }}
+          ports:
+            - name: {{ .Values.service.readingglassesdb.name }}
+              containerPort: {{ .Values.service.readingglassesdb.port }}
+          volumeMounts:
+            - name: {{ .Values.service.readingglasses.name }}-db-data
+              mountPath: {{ .Values.volumes.readingglassesdb.mountPath.dbData }}
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: rreading-glasses-credentials
+                  key: POSTGRES_PASSWORD
+            - name: POSTGRES_USER
+              value: {{ .Values.envVars.rreadingglassesdb.POSTGRES_USER }}
+            - name: POSTGRES_DB
+              value: {{ .Values.envVars.rreadingglassesdb.POSTGRES_DB }}
