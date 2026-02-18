@@ -145,7 +145,7 @@ volumes:
       config: /config
   rrgglasses:
     mountPath:
-      config: /
+      config: /config
   rrgglassesdb:
     mountPath:
       dbData: /var/lib/postgresql/data
