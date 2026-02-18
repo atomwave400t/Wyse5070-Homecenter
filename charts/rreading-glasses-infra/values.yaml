@@ -1,0 +1,9 @@
+persistence:
+  enabled: true
+  size: 1Gi
+  name: rreading-glasses-pv
+  storageClass: rreading-glasses-local-path-retain
+
+app:
+  name: rreading-glasses
+  namespace: jellyfin
