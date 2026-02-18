@@ -152,4 +152,5 @@ volumes:
 
 commands:
   rrgglasses:
-    entrypoint: ["/main", "serve"]
+    command: ["/main"]
+    args: ["serve","--verbose", "--upstream=STRING"]

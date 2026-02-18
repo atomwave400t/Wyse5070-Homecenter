@@ -172,7 +172,8 @@ spec:
         - name: {{ .Values.service.rrgglasses.name }}
           image: "{{ .Values.image.rrgglasses.repository }}:{{ .Values.image.rrgglasses.tag }}"
           imagePullPolicy: {{ .Values.image.rrgglasses.pullPolicy }}
-          command: {{ .Values.commands.rrgglasses.entrypoint }}
+          command: {{ .Values.commands.rrgglasses.command }}
+          args: {{ .Values.commands.rrglasses.args }}
           ports:
             - name: {{ .Values.service.rrgglasses.name }}
               containerPort: {{ .Values.service.rrgglasses.port }}
