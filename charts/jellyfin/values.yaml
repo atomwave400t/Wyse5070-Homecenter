@@ -149,3 +149,7 @@ volumes:
   rrgglassesdb:
     mountPath:
       dbData: /var/lib/postgresql/data
+
+commands:
+  rrgglasses:
+    entrypoint: ["/main", "serve"]
