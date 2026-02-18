@@ -89,7 +89,7 @@ service:
 
   rrgglasses:
     port: 8788
-    name: "rreading-glasses"
+    name: "rrg-glasses"
     hostname: "rreading-glasses.krz.home"
 
   rrgglassesdb:
