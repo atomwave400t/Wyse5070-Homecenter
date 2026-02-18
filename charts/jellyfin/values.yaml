@@ -87,12 +87,12 @@ service:
     name: "bookshelf"
     hostname: "bookshelf.krz.home"
 
-  readingglasses:
+  rreadingglasses:
     port: 8788
-    name: "reading-glasses"
+    name: "rreading-glasses"
     hostname: "rreading-glasses.krz.home"
 
-  readingglassesdb:
+  rreadingglassesdb:
     port: 5432
     name: "rreading-glassesdb"
 
