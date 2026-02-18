@@ -1,0 +1,9 @@
+persistence:
+  enabled: true
+  size: 1Gi
+  name: rrg-glasses-pv
+  storageClass: rrg-glasses-local-path-retain
+
+app:
+  name: rrg-glasses
+  namespace: jellyfin
