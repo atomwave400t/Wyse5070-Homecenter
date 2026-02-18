@@ -75,7 +75,7 @@ spec:
                 name: {{ include "jellyfin.fullname" $ }}
                 port:
                   number: {{ $.Values.service.qbittorrent.port }}
-    - host: {{ $.Values.service.rreadingglasses.hostname }}
+    - host: {{ $.Values.service.rrgglasses.hostname }}
       http:
         paths:
           - path: /
@@ -84,7 +84,7 @@ spec:
               service:
                 name: {{ include "jellyfin.fullname" $ }}
                 port:
-                  number: {{ $.Values.service.rreadingglasses.port }}
+                  number: {{ $.Values.service.rrgglasses.port }}
     - host: {{ $.Values.service.bookshelf.hostname }}
       http:
         paths:

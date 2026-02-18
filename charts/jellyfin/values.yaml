@@ -41,13 +41,13 @@ image:
     # Overrides the image tag whose default is the chart appVersion.
     tag: "hardcover"
 
-  rreadingglasses:
+  rrgglasses:
     repository: "blampe/rreading-glasses"
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
     tag: "latest"
 
-  rreadingglassesdb:
+  rrgglassesdb:
     repository: "postgres"
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
@@ -87,14 +87,14 @@ service:
     name: "bookshelf"
     hostname: "bookshelf.krz.home"
 
-  rreadingglasses:
+  rrgglasses:
     port: 8788
     name: "rreading-glasses"
     hostname: "rreading-glasses.krz.home"
 
-  rreadingglassesdb:
+  rrgglassesdb:
     port: 5432
-    name: "rreading-glassesdb"
+    name: "rrg-glassesdb"
 
   type: ClusterIP
 
@@ -113,13 +113,13 @@ envVars:
   qbittorrent:
     PUID: "1000"
     PGID: "1000"
-  rreadingglasses:
+  rrgglasses:
     POSTGRES_HOST: "localhost"
-    POSTGRES_DATABASE: "rreading-glasses"
-    POSTGRES_USER: "rreading-glasses"
-  rreadingglassesdb:
-    POSTGRES_DB: "rreading-glasses"
-    POSTGRES_USER: "rreading-glasses"
+    POSTGRES_DATABASE: "rrg-glasses"
+    POSTGRES_USER: "rrg-glasses"
+  rrgglassesdb:
+    POSTGRES_DB: "rrg-glasses"
+    POSTGRES_USER: "rrg-glasses"
 
 volumes:
   jellyfin:
@@ -143,9 +143,9 @@ volumes:
   bookshelf:
     mountPath:
       config: /config
-  rreadingglasses:
+  rrgglasses:
     mountPath:
       config: /
-  rreadingglassesdb:
+  rrgglassesdb:
     mountPath:
       dbData: /var/lib/postgresql/data
