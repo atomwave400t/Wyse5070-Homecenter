@@ -1,6 +1,6 @@
 persistence:
   enabled: true
-  size: 1Gi
+  size: 10Gi
   name: jellyfin-media-pv
   storageClass: jellyfin-media-local-path-retain
 
