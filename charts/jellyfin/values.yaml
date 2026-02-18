@@ -90,11 +90,11 @@ service:
   readingglasses:
     port: 8788
     name: "reading-glasses"
-    hostname: "reading-glasses.krz.home"
+    hostname: "rreading-glasses.krz.home"
 
   readingglassesdb:
     port: 5432
-    name: "reading-glassesdb"
+    name: "rreading-glassesdb"
 
   type: ClusterIP
 
@@ -140,9 +140,9 @@ volumes:
     mountPath:
       config: /config
       downloads: /downloads
-  readingglasses:
+  rreadingglasses:
     mountPath:
       config: /
-  readingglassesdb:
+  rreadingglassesdb:
     mountPath:
       dbData: /var/lib/postgresql/data

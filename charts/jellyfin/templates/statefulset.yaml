@@ -169,15 +169,15 @@ spec:
             - name: {{ .Values.service.qbittorrent.name }}-downloads-data
               mountPath: {{ .Values.volumes.qbittorrent.mountPath.downloads }}
 
-        - name: {{ .Values.service.readingglasses.name }}
-          image: "{{ .Values.image.readingglasses.repository }}:{{ .Values.image.readingglasses.tag }}"
-          imagePullPolicy: {{ .Values.image.readingglasses.pullPolicy }}
+        - name: {{ .Values.service.rreadingglasses.name }}
+          image: "{{ .Values.image.rreadingglasses.repository }}:{{ .Values.image.rreadingglasses.tag }}"
+          imagePullPolicy: {{ .Values.image.rreadingglasses.pullPolicy }}
           ports:
-            - name: {{ .Values.service.readingglasses.name }}
-              containerPort: {{ .Values.service.readingglasses.port }}
+            - name: {{ .Values.service.rreadingglasses.name }}
+              containerPort: {{ .Values.service.rreadingglasses.port }}
           volumeMounts:
-            - name: {{ .Values.service.readingglasses.name }}-data
-              mountPath: {{ .Values.volumes.readingglasses.mountPath.config }}
+            - name: {{ .Values.service.rreadingglasses.name }}-data
+              mountPath: {{ .Values.volumes.rreadingglasses.mountPath.config }}
           env:
             - name: POSTGRES_PASSWORD
               valueFrom:
@@ -191,15 +191,15 @@ spec:
             - name: POSTGRES_USER
               value: {{ .Values.envVars.rreadingglasses.POSTGRES_USER }}
 
-        - name: {{ .Values.service.readingglassesdb.name }}
-          image: "{{ .Values.image.readingglassesdb.repository }}:{{ .Values.image.readingglassesdb.tag }}"
-          imagePullPolicy: {{ .Values.image.readingglassesdb.pullPolicy }}
+        - name: {{ .Values.service.rreadingglassesdb.name }}
+          image: "{{ .Values.image.rreadingglassesdb.repository }}:{{ .Values.image.rreadingglassesdb.tag }}"
+          imagePullPolicy: {{ .Values.image.rreadingglassesdb.pullPolicy }}
           ports:
-            - name: {{ .Values.service.readingglassesdb.name }}
-              containerPort: {{ .Values.service.readingglassesdb.port }}
+            - name: {{ .Values.service.rreadingglassesdb.name }}
+              containerPort: {{ .Values.service.rreadingglassesdb.port }}
           volumeMounts:
-            - name: {{ .Values.service.readingglasses.name }}-db-data
-              mountPath: {{ .Values.volumes.readingglassesdb.mountPath.dbData }}
+            - name: {{ .Values.service.rreadingglasses.name }}-db-data
+              mountPath: {{ .Values.volumes.rreadingglassesdb.mountPath.dbData }}
           env:
             - name: POSTGRES_PASSWORD
               valueFrom:

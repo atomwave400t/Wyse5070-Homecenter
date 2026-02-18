@@ -37,9 +37,9 @@ spec:
       port: {{ .Values.service.bookshelf.port }}
       targetPort: {{ .Values.service.bookshelf.name }}
       protocol: TCP
-    - name: {{ .Values.service.readingglasses.name }}
-      port: {{ .Values.service.readingglasses.port }}
-      targetPort: {{ .Values.service.readingglasses.name }}
+    - name: {{ .Values.service.rreadingglasses.name }}
+      port: {{ .Values.service.rreadingglasses.port }}
+      targetPort: {{ .Values.service.rreadingglasses.name }}
       protocol: TCP
     - name: qb-udp-port
       port: {{ .Values.service.qbittorrent.udpPort }}
