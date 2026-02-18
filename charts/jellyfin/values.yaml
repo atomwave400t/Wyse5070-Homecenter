@@ -140,6 +140,9 @@ volumes:
     mountPath:
       config: /config
       downloads: /downloads
+  bookshelf:
+    mountPath:
+      config: /config
   rreadingglasses:
     mountPath:
       config: /
