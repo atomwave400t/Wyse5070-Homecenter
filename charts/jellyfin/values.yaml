@@ -120,6 +120,9 @@ envVars:
   rrgglassesdb:
     POSTGRES_DB: "rrg-glasses"
     POSTGRES_USER: "rrg-glasses"
+  bookshelf:
+    PUID: "911"
+    PGID: "911"
 
 volumes:
   jellyfin:
