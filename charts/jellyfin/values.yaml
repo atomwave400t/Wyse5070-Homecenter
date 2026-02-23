@@ -156,5 +156,5 @@ commands:
     args:
       - serve
       - --verbose
-      - --upstream=STRING
+      - --upstream=hardcover.bookinfo.pro
 
