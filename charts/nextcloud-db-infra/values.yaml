@@ -1,0 +1,9 @@
+persistence:
+  enabled: true
+  size: 1Gi
+  name: nextcloud-db-pv
+  storageClass: nextcloud-db-local-path-retain
+
+app:
+  name: nextcloud-db
+  namespace: nextcloud

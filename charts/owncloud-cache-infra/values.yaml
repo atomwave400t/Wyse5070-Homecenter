@@ -1,9 +1,0 @@
-persistence:
-  enabled: true
-  size: 1Gi
-  name: owncloud-cache-pv
-  storageClass: owncloud-cache-local-path-retain
-
-app:
-  name: owncloud-cache
-  namespace: owncloud

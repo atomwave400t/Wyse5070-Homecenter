@@ -3,5 +3,5 @@ namespaces:
   - name: homeassistant
   - name: jellyfin
   - name: n8n
-  - name: owncloud
+  - name: nextcloud
 

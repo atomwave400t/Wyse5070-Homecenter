@@ -1,0 +1,97 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "nextcloud.fullname" . }}
+  namespace: {{ include "nextcloud.name" . }}
+  labels:
+    {{- include "nextcloud.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ include "nextcloud.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "nextcloud.name" . }}
+    spec:
+      volumes:
+        - name: {{ include "nextcloud.name" . }}-data
+          persistentVolumeClaim:
+            claimName: {{ include "nextcloud.name" . }}-pvc
+            readOnly: false
+        - name: {{ include "nextcloud.name" . }}-db-data
+          persistentVolumeClaim:
+            claimName: {{ include "nextcloud.name" . }}-db-pvc
+            readOnly: false
+        - name: {{ include "nextcloud.name" . }}-cache-data
+          persistentVolumeClaim:
+            claimName: {{ include "nextcloud.name" . }}-cache-pvc
+            readOnly: false
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.nextcloud.repository }}:{{ .Values.image.nextcloud.tag }}"
+          imagePullPolicy: {{ .Values.image.nextcloud.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.nextcloud.port }}
+          volumeMounts:
+            - name: {{ include "nextcloud.name" . }}-data
+              mountPath: {{ .Values.volumes.nextcloud.mountPath }}
+          env:
+            - name: PUID
+              value: {{ .Values.envVars.nextcloud.PUID }}
+            - name: PGID
+              value: {{ .Values.envVars.nextcloud.PGID }}
+            - name: TZ
+              value: {{ .Values.envVars.nextcloud.TZ }}
+            - name: MYSQL_DATABASE
+              value: {{ .Values.envVars.nextcloud.MYSQL_DATABASE }}
+            - name: MYSQL_HOST
+              value: {{ .Values.envVars.nextcloud.MYSQL_HOST }}
+            - name: REDIS_HOST
+              value: {{ .Values.envVars.nextcloud.REDIS_HOST }}
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: nextcloud-credentials
+                  key: MYSQL_USER
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: nextcloud-credentials
+                  key: MYSQL_PASSWORD
+
+        - name: {{ .Values.service.mariadb.name }}
+          image: "{{ .Values.image.mariadb.repository }}:{{ .Values.image.mariadb.tag }}"
+          imagePullPolicy: {{ .Values.image.mariadb.pullPolicy }}
+          volumeMounts:
+            - name: {{ include "nextcloud.name" . }}-db-data
+              mountPath: {{ .Values.volumes.mariadb.mountPath }}
+          env:
+            - name: MARIADB_AUTO_UPGRADE
+              value: {{ .Values.envVars.mariadb.MARIADB_AUTO_UPGRADE | quote }}
+            - name: MYSQL_DATABASE
+              value: {{ .Values.envVars.nextcloud.MYSQL_DATABASE }}
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: nextcloud-credentials
+                  key: MYSQL_ROOT_PASSWORD
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: nextcloud-credentials
+                  key: MYSQL_USER
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: nextcloud-credentials
+                  key: MYSQL_PASSWORD
+
+        - name: {{ .Values.service.redis.name }}
+          image: "{{ .Values.image.redis.repository }}:{{ .Values.image.redis.tag }}"
+          imagePullPolicy: {{ .Values.image.redis.pullPolicy }}
+          volumeMounts:
+            - name: {{ include "nextcloud.name" . }}-cache-data
+              mountPath: {{ .Values.volumes.redis.mountPath }}
+

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "nextcloud.fullname" . }}
+  namespace: {{ include "nextcloud.name" . }}
+  labels:
+    app: {{ include "nextcloud.name" . }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.nextcloud.port }}
+      targetPort: http
+      protocol: TCP
+  selector:
+    app: {{ include "nextcloud.name" . }}

@@ -1,0 +1,9 @@
+persistence:
+  enabled: true
+  size: 1Gi
+  name: nextcloud-cache-pv
+  storageClass: nextcloud-cache-local-path-retain
+
+app:
+  name: nextcloud-cache
+  namespace: nextcloud

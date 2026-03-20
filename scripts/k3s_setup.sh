@@ -4,11 +4,10 @@ read -s -p "Enter password for postgres user(n8n): " POSTGRES_NON_ROOT_PASSWORD
 echo ""
 read -s -p "Enter password for root postgres(n8n): " POSTGRES_PASSWORD
 echo ""
-read -s -p "Enter password for root mysql(owncloud): " MYSQL_ROOT_PASSWORD
+read -s -p "Enter password for root mysql(nextcloud): " MYSQL_ROOT_PASSWORD
 echo ""
-read -s -p "Enter password for non root mysql user(owncloud): " OWNCLOUD_DB_PASSWORD
+read -s -p "Enter password for non root mysql user(nextcloud): " MYSQL_PASSWORD
 echo ""
-read -s -p "Enter password for owncloud app admin: " OWNCLOUD_ADMIN_PASSWORD
 
 #setup firewalld
 firewall-cmd --permanent --add-port=6443/tcp #apiserver
@@ -39,11 +38,14 @@ data_directories="
 /opt/jellyfin-config-data
 /opt/n8n-data
 /opt/n8n-db-data
-/opt/owncloud-data
-/opt/owncloud-cache-data
-/opt/owncloud-db-data
+/opt/nextcloud-data
+/opt/nextcloud-cache-data
+/opt/nextcloud-db-data
 /opt/sonarr-data
 /opt/radarr-data
+/opt/bookshelf-data
+/opt/rrg-glasses-data
+/opt/rrg-glasses-db-db-data
 "
 cd $current_dir
 
@@ -78,12 +80,10 @@ kubectl create secret generic n8n-credentials -n n8n  \
     --from-literal=POSTGRES_USER=root \
     --from-literal=POSTGRES_PASSWORD=$POSTGRES_PASSWORD  && echo "n8n credentials loaded!"
 
-kubectl create secret generic owncloud-credentials -n owncloud \
+kubectl create secret generic nextcloud-credentials -n nextcloud \
     --from-literal=MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD \
-    --from-literal=OWNCLOUD_DB_USERNAME=owncloud \
-    --from-literal=OWNCLOUD_ADMIN_USERNAME=admin \
-    --from-literal=OWNCLOUD_ADMIN_PASSWORD=$OWNCLOUD_ADMIN_PASSWORD \
-    --from-literal=OWNCLOUD_DB_PASSWORD=$OWNCLOUD_DB_PASSWORD && echo "Owncloud credentials loaded!"
+    --from-literal=MYSQL_USER=nextcloud \
+    --from-literal=MYSQL_PASSWORD=$MYSQL_PASSWORD && echo "Nextcloud credentials loaded!"
 
 
 sleep 20
