@@ -39,9 +39,9 @@ spec:
               mountPath: {{ .Values.volumes.nextcloud.mountPath }}
           env:
             - name: PUID
-              value: {{ .Values.envVars.nextcloud.PUID }}
+              value: {{ .Values.envVars.nextcloud.PUID | quote }}
             - name: PGID
-              value: {{ .Values.envVars.nextcloud.PGID }}
+              value: {{ .Values.envVars.nextcloud.PGID | quote }}
             - name: TZ
               value: {{ .Values.envVars.nextcloud.TZ }}
             - name: MYSQL_DATABASE
