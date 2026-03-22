@@ -27,6 +27,9 @@ spec:
           persistentVolumeClaim:
             claimName: {{ include "nextcloud.name" . }}-cache-pvc
             readOnly: false
+        - name: {{ include "nextcloud.name" . }}-apache-config
+          configMap:
+            name: {{ include "nextcloud.name" . }}-apache-config
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.nextcloud.repository }}:{{ .Values.image.nextcloud.tag }}"
@@ -37,6 +40,10 @@ spec:
           volumeMounts:
             - name: {{ include "nextcloud.name" . }}-data
               mountPath: {{ .Values.volumes.nextcloud.mountPath }}
+          volumeMounts:
+            - name: {{ include "nextcloud.name" . }}-apache-config
+              mountPath: /etc/apache2/conf-enabled/custom.conf
+              subPath: custom.conf
           env:
             - name: PUID
               value: {{ .Values.envVars.nextcloud.PUID | quote }}
