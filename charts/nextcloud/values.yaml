@@ -9,7 +9,7 @@ image:
     # This sets the pull policy for images.
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
-    tag: "latest"
+    tag: "stable"
   mariadb:
     repository: "mariadb"
     # This sets the pull policy for images.
@@ -26,7 +26,7 @@ image:
 # This is for setting up a service more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/
 service:
   nextcloud:  # This sets the ports more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#field-spec-ports
-    port: 8081
+    port: 80
   mariadb:
     name: "mariadb"
   redis:
@@ -47,7 +47,7 @@ envVars:
     PGID: 1000
     TZ: "Europe/Warsaw"
     MYSQL_DATABASE: "nextcloud"
-    MYSQL_HOST: "localhost"
+    MYSQL_HOST: "127.0.0.1"
     REDIS_HOST: "localhost"
   mariadb:
     MYSQL_DATABASE: "nextcloud"
