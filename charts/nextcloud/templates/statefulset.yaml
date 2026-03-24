@@ -43,7 +43,7 @@ spec:
           volumeMounts:
             - name: {{ include "nextcloud.name" . }}-apache-config
               mountPath: /etc/apache2/sites-enabled/000-default.conf
-              subPath: default.conf
+              subPath: 000-default.conf
           env:
             - name: PUID
               value: {{ .Values.envVars.nextcloud.PUID | quote }}
