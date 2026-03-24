@@ -8,6 +8,9 @@ read -s -p "Enter password for root mysql(nextcloud): " MYSQL_ROOT_PASSWORD
 echo ""
 read -s -p "Enter password for non root mysql user(nextcloud): " MYSQL_PASSWORD
 echo ""
+read -s -p "Enter password for nextcloud admin password: " NEXTCLOUD_ADMIN_PASSWORD
+
+
 
 #setup firewalld
 firewall-cmd --permanent --add-port=6443/tcp #apiserver
@@ -83,7 +86,8 @@ kubectl create secret generic n8n-credentials -n n8n  \
 kubectl create secret generic nextcloud-credentials -n nextcloud \
     --from-literal=MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD \
     --from-literal=MYSQL_USER=nextcloud \
-    --from-literal=MYSQL_PASSWORD=$MYSQL_PASSWORD && echo "Nextcloud credentials loaded!"
+    --from-literal=MYSQL_PASSWORD=$MYSQL_PASSWORD \
+    --from-literal=NEXTCLOUD_ADMIN_PASSWORD=$NEXTCLOUD_ADMIN_PASSWORD && echo "Nextcloud credentials loaded!"
 
 
 sleep 20
