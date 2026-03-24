@@ -50,6 +50,7 @@ envVars:
     MYSQL_HOST: "127.0.0.1"
     REDIS_HOST: "localhost"
     NEXTCLOUD_ADMIN_USER: root
+    NEXTCLOUD_TRUSTED_DOMAINS: "nextcloud.krz.home"
   mariadb:
     MYSQL_DATABASE: "nextcloud"
     MARIADB_AUTO_UPGRADE: 1
