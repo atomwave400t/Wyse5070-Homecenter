@@ -95,4 +95,24 @@ spec:
                 name: {{ include "jellyfin.fullname" $ }}
                 port:
                   number: {{ $.Values.service.bookshelf.port }}
+    - host: {{ $.Values.service.byparr.hostname }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "jellyfin.fullname" $ }}
+                port:
+                  number: {{ $.Values.service.byparr.port }}
+    - host: {{ $.Values.service.pproxy.hostname }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "jellyfin.fullname" $ }}
+                port:
+                  number: {{ $.Values.service.pproxy.port }}
 {{- end }}

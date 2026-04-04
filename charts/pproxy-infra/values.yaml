@@ -1,0 +1,9 @@
+persistence:
+  enabled: true
+  size: 1Gi
+  name: pproxy-pv
+  storageClass: pproxy-local-path-retain
+
+app:
+  name: pproxy
+  namespace: jellyfin

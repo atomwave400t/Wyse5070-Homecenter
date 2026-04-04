@@ -17,6 +17,16 @@ image:
     # Overrides the image tag whose default is the chart appVersion.
     tag: "latest"
 
+  byparr:
+    repository: "ghcr.io/thephaseless/byparr"
+    pullPolicy: IfNotPresent
+    tag: "latest"
+
+  pproxy:
+    repository: "mosajjal/pproxy"
+    pullPolicy: IfNotPresent
+    tag: "latest"
+
   sonarr:
     repository: "lscr.io/linuxserver/sonarr"
     pullPolicy: IfNotPresent
@@ -53,6 +63,8 @@ image:
     # Overrides the image tag whose default is the chart appVersion.
     tag: "17"
 
+
+
 # This is for setting up a service more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/
 service:
   # This sets the ports more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#field-spec-ports
@@ -65,6 +77,16 @@ service:
     port: 9117
     name: "jackett"
     hostname: "jackett.krz.home"
+
+  byparr:
+    port: 8191
+    name: "byparr"
+    hostname: "byparr.krz.home"
+
+  pproxy:
+    port: 8080
+    name: "pproxy"
+    hostname: "pproxy.krz.home"
 
   sonarr:
     port: 8989
@@ -123,6 +145,8 @@ envVars:
   bookshelf:
     PUID: "911"
     PGID: "911"
+  byparr:
+    PROXY: "http://localhost:8080"
 
 volumes:
   jellyfin:
@@ -133,6 +157,12 @@ volumes:
   jackett:
     mountPath:
       config: /config
+  byparr:
+    mountPath:
+      config: /app/screenshots
+  pproxy:
+    mountPath:
+      config: /
   sonarr:
     mountPath:
       config: /config

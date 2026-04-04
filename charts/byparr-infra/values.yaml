@@ -1,0 +1,9 @@
+persistence:
+  enabled: true
+  size: 1Gi
+  name: byparr-pv
+  storageClass: byparr-local-path-retain
+
+app:
+  name: byparr
+  namespace: jellyfin

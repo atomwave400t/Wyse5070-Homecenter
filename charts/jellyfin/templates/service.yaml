@@ -41,6 +41,14 @@ spec:
       port: {{ .Values.service.rrgglasses.port }}
       targetPort: {{ .Values.service.rrgglasses.name }}
       protocol: TCP
+    - name: {{ .Values.service.byparr.name }}
+      port: {{ .Values.service.byparr.port }}
+      targetPort: {{ .Values.service.byparr.name }}
+      protocol: TCP
+    - name: {{ .Values.service.pproxy.name }}
+      port: {{ .Values.service.pproxy.port }}
+      targetPort: {{ .Values.service.pproxy.name }}
+      protocol: TCP
     - name: qb-udp-port
       port: {{ .Values.service.qbittorrent.udpPort }}
       targetPort:  {{ .Values.service.qbittorrent.udpPort }}
