@@ -1,0 +1,9 @@
+persistence:
+  enabled: true
+  size: 1Gi
+  name: dietynfz-pv
+  storageClass: dietynfz-local-path-retain
+
+app:
+  name: dietynfz
+  namespace: dietynfz

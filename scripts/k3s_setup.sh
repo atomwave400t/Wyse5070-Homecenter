@@ -9,7 +9,10 @@ echo ""
 read -s -p "Enter password for non root mysql user(nextcloud): " MYSQL_PASSWORD
 echo ""
 read -s -p "Enter password for nextcloud admin password: " NEXTCLOUD_ADMIN_PASSWORD
-
+echo ""
+read -s -p "Enter token to HA api(dietynfz): " HOME_ASSISTANT_TOKEN
+echo ""
+read -s -p "Enter api for gemini llm(dietynfz): " GEMINI_API_KEY
 
 
 #setup firewalld
@@ -49,6 +52,7 @@ data_directories="
 /opt/bookshelf-data
 /opt/rrg-glasses-data
 /opt/rrg-glasses-db-db-data
+/opt/dietynfz-data
 "
 cd $current_dir
 
@@ -89,6 +93,9 @@ kubectl create secret generic nextcloud-credentials -n nextcloud \
     --from-literal=MYSQL_PASSWORD=$MYSQL_PASSWORD \
     --from-literal=NEXTCLOUD_ADMIN_PASSWORD=$NEXTCLOUD_ADMIN_PASSWORD && echo "Nextcloud credentials loaded!"
 
+kubectl create secret generic dietynfz-credentials -n dietynfz \
+	    --from-literal=GEMINI_API_KEY=$GEMINI_API_KEY \
+	    --from-literal=HOME_ASSISTANT_TOKEN=$HOME_ASSISTANT_TOKEN && echo "Dietynfz credentials loaded!"
 
 sleep 20
 

@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "dietynfz.fullname" . }}
+  namespace: {{ include "dietynfz.name" . }}
+  labels:
+    {{- include "dietynfz.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ include "dietynfz.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "dietynfz.name" . }}
+    spec:
+      volumes:
+        - name: {{ include "dietynfz.name" . }}-data
+          persistentVolumeClaim:
+            claimName: {{ include "dietynfz.name" . }}-pvc
+            readOnly: false
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+          volumeMounts:
+            - name: {{ include "dietynfz.name" . }}-data
+              mountPath: {{ .Values.volumes.mountPath }}
+          env:
+            - name: HOME_ASSISTANT_URL
+              value: {{ .Values.envVars.dietynfz.HOME_ASSISTANT_URL }}
+            - name: TODO_ENTITY_ID
+              value: {{ .Values.envVars.dietynfz.TODO_ENTITY_ID }}
+            - name: MODEL_NAME
+              value: {{ .Values.envVars.dietynfz.MODEL_NAME }}
+            - name: GEMINI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.dietynfz.name }}
+                  key: GEMINI_API_KEY
+            - name: HOME_ASSISTANT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.dietynfz.name }}
+                  key: HOME_ASSISTANT_TOKEN
+
