@@ -22,8 +22,6 @@ data:
         fruit:metadata = stream
         fruit:resource = stream
 
-        map to guest = no
-
         load printers = no
         printing = bsd
         printcap name = /dev/null
