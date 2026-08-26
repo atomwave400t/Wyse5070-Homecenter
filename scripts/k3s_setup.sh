@@ -13,7 +13,9 @@ echo ""
 read -s -p "Enter token to HA api(dietynfz): " HOME_ASSISTANT_TOKEN
 echo ""
 read -s -p "Enter api for gemini llm(dietynfz): " GEMINI_API_KEY
-
+echo ""
+read -s -p "Enter password for timemachine(user: timemachine):" TIMEMACHINE_PASS
+echo ""
 
 #setup firewalld
 firewall-cmd --permanent --add-port=6443/tcp #apiserver
@@ -97,6 +99,8 @@ kubectl create secret generic dietynfz-credentials -n dietynfz \
 	    --from-literal=GEMINI_API_KEY=$GEMINI_API_KEY \
 	    --from-literal=HOME_ASSISTANT_TOKEN=$HOME_ASSISTANT_TOKEN && echo "Dietynfz credentials loaded!"
 
+kubectl create secret generic timemachine-credentials -n samba \
+            --from-literal=PASS=$TIMEMACHINE_PASS \
 sleep 20
 
 #install volume charts first. All of these should have "infra" suffix

@@ -5,3 +5,4 @@ namespaces:
   - name: n8n
   - name: nextcloud
   - name: dietynfz
+  - name: samba

@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: timemachine-smb-config
+  namespace: samba
+data:
+  smb.conf: |
+    [global]
+        workgroup = WORKGROUP
+        server string = Time Machine
+
+        security = user
+
+        server min protocol = SMB2
+        server max protocol = SMB3
+
+        ea support = yes
+
+        vfs objects = fruit streams_xattr
+
+        fruit:aapl = yes
+        fruit:metadata = stream
+        fruit:resource = stream
+
+        map to guest = no
+
+        load printers = no
+        printing = bsd
+        printcap name = /dev/null
+        disable spoolss = yes
+
+    [TimeMachine]
+        path = /storage
+
+        browseable = yes
+        read only = no
+
+        valid users = timemachine
+
+        vfs objects = fruit streams_xattr
+
+        fruit:time machine = yes
+        fruit:time machine max size = 3T
+
+        inherit permissions = yes
