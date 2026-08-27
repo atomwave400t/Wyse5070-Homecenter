@@ -56,6 +56,7 @@ data_directories="
 /opt/rrg-glasses-data
 /opt/rrg-glasses-db-db-data
 /opt/dietynfz-data
+/opt/samba-data
 "
 cd $current_dir
 
