@@ -160,9 +160,6 @@ volumes:
   byparr:
     mountPath:
       config: /app/screenshots
-  pproxy:
-    mountPath:
-      config: /
   sonarr:
     mountPath:
       config: /config
