@@ -35,6 +35,7 @@ envVars:
   changedetection:
     PLAYWRIGHT_DRIVER_URL: "ws://localhost:3000/?stealth=1&--disable-web-security=true"
     TZ: "Europe/Warsaw"
+    ALLOW_IANA_RESTRICTED_ADDRESSES: true
   browserless:
     SCREEN_WIDTH: "1920"
     SCREEN_HEIGHT: "1024"

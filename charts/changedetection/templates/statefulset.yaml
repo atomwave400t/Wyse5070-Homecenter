@@ -45,6 +45,8 @@ spec:
               value: {{ .Values.envVars.changedetection.PLAYWRIGHT_DRIVER_URL }}
             - name: TZ
               value: {{ .Values.envVars.changedetection.TZ }}
+            - name: ALLOW_IANA_RESTRICTED_ADDRESSES
+              value: {{ .Values.envVars.changedetection.ALLOW_IANA_RESTRICTED_ADDRESSES | quote }}
 
         # sidecar container
         {{- if .Values.sidecar.enabled }}
