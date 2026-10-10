@@ -14,6 +14,9 @@ spec:
       labels:
         app: {{ include "jellyfin.name" . }}
     spec:
+      securityContext:
+        supplementalGroups:
+          - 105
       volumes:
         - name: {{ include "jellyfin.name" . }}-config-data
           persistentVolumeClaim:
@@ -63,10 +66,16 @@ spec:
           persistentVolumeClaim:
             claimName: {{ .Values.service.rrgglasses.name }}-db-pvc
             readOnly: false
+        - name: intel-gpu
+          hostPath:
+            path: /dev/dri/renderD128
+            type: CharDevice
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.jellyfin.repository }}:{{ .Values.image.jellyfin.tag }}"
           imagePullPolicy: {{ .Values.image.jellyfin.pullPolicy }}
+          securityContext:
+            privileged: true
           ports:
             - name: http
               containerPort: {{ .Values.service.jellyfin.port }}
@@ -80,6 +89,8 @@ spec:
               mountPath: {{ .Values.volumes.jellyfin.mountPath.cache }}
             - name: {{ include "jellyfin.name" . }}-media-data
               mountPath: {{ .Values.volumes.jellyfin.mountPath.media }}
+            - name: intel-gpu
+              mountPath: /dev/dri/renderD128
           env:
             - name: JELLYFIN_PublishedServerUrl
               value: {{ .Values.ingress.host }}
@@ -172,6 +183,11 @@ spec:
               mountPath: {{ .Values.volumes.bookshelf.mountPath.config }}
             - name: {{ .Values.service.qbittorrent.name }}-downloads-data
               mountPath: {{ .Values.volumes.qbittorrent.mountPath.downloads }}
+          env:
+            - name: METADATA_URL
+              value: {{ .Values.envVars.bookshelf.METADATA_URL }}
+            - name: HARDCOVER
+              value: {{ .Values.envVars.bookshelf.HARDCOVER | quote  }}
 
         - name: {{ .Values.service.rrgglasses.name }}
           image: "{{ .Values.image.rrgglasses.repository }}:{{ .Values.image.rrgglasses.tag }}"
