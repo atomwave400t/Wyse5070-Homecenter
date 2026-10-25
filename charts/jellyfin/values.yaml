@@ -145,6 +145,8 @@ envVars:
   bookshelf:
     PUID: "911"
     PGID: "911"
+    METADATA_URL: "http://rreading-glasses.krz.home"
+    HARDCOVER: false
   byparr:
     PROXY: "http://localhost:8080"
 
