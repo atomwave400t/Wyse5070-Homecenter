@@ -30,6 +30,9 @@ spec:
         - name: {{ include "nextcloud.name" . }}-apache-config
           configMap:
             name: {{ include "nextcloud.name" . }}-apache-config
+        - name: {{ include "nextcloud.name" . }}-php-config
+          configMap:
+            name: {{ include "nextcloud.name" . }}-php-config
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.nextcloud.repository }}:{{ .Values.image.nextcloud.tag }}"
@@ -43,6 +46,9 @@ spec:
             - name: {{ include "nextcloud.name" . }}-apache-config
               mountPath: /etc/apache2/sites-enabled/000-default.conf
               subPath: 000-default.conf
+            - name: {{ include "nextcloud.name" . }}-php-config
+              mountPath: /usr/local/etc/php/conf.d/nextcloud.ini
+              subPath: nextcloud.ini
           env:
             - name: PUID
               value: {{ .Values.envVars.nextcloud.PUID | quote }}
@@ -56,6 +62,12 @@ spec:
               value: {{ .Values.envVars.nextcloud.MYSQL_HOST }}
             - name: REDIS_HOST
               value: {{ .Values.envVars.nextcloud.REDIS_HOST }}
+            - name: PHP_MEMORY_LIMIT
+              value: {{ .Values.envVars.nextcloud.PHP_MEMORY_LIMIT }}
+            - name: PHP_UPLOAD_LIMIT
+              value: {{ .Values.envVars.nextcloud.PHP_UPLOAD_LIMIT }}
+            - name: APACHE_TIMEOUT
+              value: {{ .Values.envVars.nextcloud.APACHE_TIMEOUT | quote }}
             - name: NEXTCLOUD_TRUSTED_DOMAINS
               value: {{ .Values.envVars.nextcloud.NEXTCLOUD_TRUSTED_DOMAINS }}
             - name: MYSQL_USER

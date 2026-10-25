@@ -9,7 +9,7 @@ image:
     # This sets the pull policy for images.
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
-    tag: "stable"
+    tag: "34.0.4"
   mariadb:
     repository: "mariadb"
     # This sets the pull policy for images.
@@ -41,6 +41,12 @@ ingress:
     nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
     nginx.ingress.kubernetes.io/use-forwarded-headers: "true"
     nginx.ingress.kubernetes.io/proxy-body-size: "10g"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "14400"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "14400"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "14400"
+    nginx.ingress.kubernetes.io/send-timeout: "14400s" 
+    nginx.ingress.kubernetes.io/proxy-buffering: "off"
+    nginx.ingress.kubernetes.io/proxy-request-buffers: "off"
 
 envVars:
   nextcloud:
@@ -52,6 +58,10 @@ envVars:
     REDIS_HOST: "localhost"
     NEXTCLOUD_ADMIN_USER: root
     NEXTCLOUD_TRUSTED_DOMAINS: "nextcloud.krz.home"
+    PHP_MEMORY_LIMIT: 10G
+    PHP_UPLOAD_LIMIT: 10G
+    PHP_MAX_EXECUTION_TIME: 14400
+    APACHE_TIMEOUT: "14400"
   mariadb:
     MYSQL_DATABASE: "nextcloud"
     MARIADB_AUTO_UPGRADE: 1
